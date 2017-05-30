@@ -1,0 +1,23 @@
+{
+  "name": "ajax-manager",
+  "version": "1.0.0",
+  "description": "An jQuery ajax management tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BboyAwey/ajax-manager.git"
+  },
+  "keywords": [
+    "jQuery",
+    "ajax"
+  ],
+  "author": "bboyawey@sina.cn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BboyAwey/ajax-manager/issues"
+  },
+  "homepage": "https://github.com/BboyAwey/ajax-manager#readme"
+}
