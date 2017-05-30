@@ -73,8 +73,18 @@ function getApi (modelName, modelConfig = {}, registerConfig = {}, config = {}) 
 //   '500': '服务器错误'
 // }
 
-let apiRegister = function (models = {}, registerConfig = {}, jquery) {
+let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
   let $ = jquery
+  // merge all models
+  let models = {}
+  modelsArray.forEach((m, i) => {
+    for (let key in m) {
+      let model = m[key]
+        // test if there are api useing same name
+      if (key in models) throw new Error(`model: api should not have same name "${key}".`)
+      models[key] = model
+    }
+  })
   // globle config
   $.ajaxSetup(Object.assign({}, models.__globlal || {}, {
     // reset data and event
