@@ -1,1 +1,1 @@
-export { default } from './ajax-manager.js'
+export { default } from './src/ajax-manager.js'
