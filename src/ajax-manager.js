@@ -64,15 +64,6 @@ function getApi (modelName, modelConfig = {}, registerConfig = {}, config = {}) 
   return abandonGlobalApiRoot ? api : (apiRoot + api)
 }
 
-// let defaultErrTextMap = {
-//   '400': '请求参数错误',
-//   '401': '您未登陆，请登录',
-//   '403': '没有权限',
-//   '404': '未找到相关接口',
-//   '408': '请求超时',
-//   '500': '服务器错误'
-// }
-
 let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
   let $ = jquery
   // merge all models
