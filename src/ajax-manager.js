@@ -111,7 +111,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
   let api = {}
   for (let key in models) {
     if (!/^__/g.test(key)) {
-      api[key] = function (config = {}, triggerAjaxStartAndStopEvent = true) {
+      api[key] = function (config = {}, triggerAjaxStartAndStopEvent = true, triggerGlobalEvents = true) {
         // merge event
         Object.keys(globalEvents).map(eventName => {
           if (registerConfig[eventName]) globalEvents[eventName].push(registerConfig[eventName])
@@ -152,15 +152,15 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
                 apiCounter.add()
                 fireStartAndStopEvents('ajaxStart', [xhr])
               }
-              fireGlobalEvents(globalEvents.beforeSend, [xhr])
+              if (triggerGlobalEvents) fireGlobalEvents(globalEvents.beforeSend, [xhr])
               fireLocalEvent(localEvents.beforeSend, [xhr])
             },
             success (data, statusText, xhr) {
-              fireGlobalEvents(globalEvents.success, [data, statusText, xhr])
+              if (triggerGlobalEvents) fireGlobalEvents(globalEvents.success, [data, statusText, xhr])
               fireLocalEvent(localEvents.success, [data, statusText, xhr])
             },
             error (xhr, statusText, error) {
-              fireGlobalEvents(globalEvents.error, [xhr, statusText, error])
+              if (triggerGlobalEvents) fireGlobalEvents(globalEvents.error, [xhr, statusText, error])
               fireLocalEvent(localEvents.error, [xhr, statusText, error])
             },
             complete (xhr, statusText) {
@@ -168,7 +168,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
                 apiCounter.remove()
                 fireStartAndStopEvents('ajaxStop', [xhr, statusText])
               }
-              fireGlobalEvents(globalEvents.complete, [xhr, statusText])
+              if (triggerGlobalEvents) fireGlobalEvents(globalEvents.complete, [xhr, statusText])
               fireLocalEvent(localEvents.complete, [xhr, statusText])
             }
           }
