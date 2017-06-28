@@ -85,7 +85,7 @@ This function return an jquery ajax object so it can call `done()`, `fail()`, `a
 
 ## Config
 
-You can write config in both model difinition config, `ajaxManager(m, globalConfig, j)` and `API(config)`.You can find all the accepted config in [jQuery.ajax](http://api.jquery.com/jQuery.ajax/). All the config will be merged in one object just like `Object.assign(ajaxManagerConfig, modelDifinitionConfig, apiCallingConfig)` except events and `data`.
+You can write config in both model difinition config, `ajaxManager(m, globalConfig, j)` and `API(config)`.You can find all the accepted config in [jQuery.ajax](http://api.jquery.com/jQuery.ajax/). All the config will be merged in one object just like `Object.assign(globalConfig, modelConfig, apiCallingConfig)` except events and `data`.
 
 ## Events
 
@@ -113,7 +113,7 @@ Local events supported in model definition config and `API()` config. The same e
 
 ## `Data`
 
-All the `data` field in those 3 configs will merge into an object(Just like `Object.assign(ajaxManagerConfigData, modelDifinitionConfigData, apiCallingConfigData)`) insteadof cover one by one.
+All the `data` field in those 3 configs will merge into an object(Just like `Object.assign(globalConfigData, modelConfigData, apiCallingConfigData)`) insteadof cover one by one.
 
 ```javascript
 var userModels = {
@@ -146,6 +146,35 @@ api.getUsers({
   auth: '123456abcdef'
 }
 */
+```
+
+## `__apiRoot`
+
+Use `__apiRoot` field to indicate the backend api root, it will concat in front of the `url`. GlobalConfig, modelConfig and apiCallingConfig are all accept this field.
+
+```javascript
+var userModels = {
+  getUsers: {
+    methods: 'GET',
+    url: '/get_users',
+  },
+  getUserInfoById: {
+    methods: 'GET',
+    url: '/get_user_info_by_id'
+  }
+}
+var globalConfig = {
+  __apiRoot: 'http://192.168.0.1'
+}
+var apis = ajaxManager([userModels], globalConfig, $)
+
+api.getUsers({
+  data: {
+    auth: '123456abcdef'
+  }
+}, true, true)
+
+// finally when fire ajax, the url will be 'http://192.168.0.1/get_users' and 'http://192.168.0.1/get_user_info_by_id'
 ```
 
 # TODO LIST：
