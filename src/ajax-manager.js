@@ -46,10 +46,11 @@ let apiCounter = {
 
 if (!window.__apiConfig__) window.__apiConfig__ = {}
 if (!window.__apiRoot__) window.__apiRoot__ = null
-function getApi (modelName, modelConfig = {}, registerConfig = {}, config = {}) {
+
+function getUrl (modelName, modelConfig = {}, registerConfig = {}, config = {}) {
   let windowApiConfig = window.__apiConfig__[modelName]
   if (!windowApiConfig) windowApiConfig = {}
-  let api = windowApiConfig.url ||
+  let url = windowApiConfig.url ||
     config.url ||
     modelConfig.url ||
     registerConfig.url || ''
@@ -57,11 +58,11 @@ function getApi (modelName, modelConfig = {}, registerConfig = {}, config = {}) 
     config.__apiRoot ||
     modelConfig.__apiRoot ||
     registerConfig.__apiRoot || ''
-  let abandonGlobalApiRoot = windowApiConfig.abandonGlobalApiRoot ||
-    config.__abandonGlobalApiRoot ||
-    modelConfig.__abandonGlobalApiRoot ||
-    registerConfig.__abandonGlobalApiRoot
-  return abandonGlobalApiRoot ? api : (apiRoot + api)
+  let ignoreGlobalApiRoot = windowApiConfig.ignoreGlobalApiRoot ||
+    config.__ignoreGlobalApiRoot ||
+    modelConfig.__ignoreGlobalApiRoot ||
+    registerConfig.__ignoreGlobalApiRoot
+  return ignoreGlobalApiRoot ? url : (apiRoot + url)
 }
 
 let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
@@ -77,14 +78,14 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
     }
   })
   // globle config
-  $.ajaxSetup(Object.assign({}, models.__globlal || {}, {
-    // reset data and event
-    data: null,
-    beforeSend: null,
-    success: null,
-    error: null,
-    complete: null
-  }))
+  // $.ajaxSetup(Object.assign({}, models.__globlal || {}, {
+  //   // reset data and event
+  //   data: null,
+  //   beforeSend: null,
+  //   success: null,
+  //   error: null,
+  //   complete: null
+  // }))
   let globalEvents = { // events set in __global and register should be add in this array
     beforeSend: [],
     success: [],
@@ -108,10 +109,10 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
       if (typeof startAndStopEvents[eventType][i] === 'function') startAndStopEvents[eventType][i](...argsArray)
     }
   }
-  let api = {}
+  let apis = {}
   for (let key in models) {
     if (!/^__/g.test(key)) {
-      api[key] = function (config = {}, triggerAjaxStartAndStopEvent = true, triggerGlobalEvents = true) {
+      apis[key] = function (config = {}, triggerAjaxStartAndStopEvent = true, triggerGlobalEvents = true) {
         // merge event
         Object.keys(globalEvents).map(eventName => {
           if (registerConfig[eventName]) globalEvents[eventName].push(registerConfig[eventName])
@@ -145,7 +146,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
           models[key] || {},
           config,
           {
-            url: getApi(key, models[key], registerConfig, config),
+            url: getUrl(key, models[key], registerConfig, config),
             data: allData,
             beforeSend (xhr) {
               if (triggerAjaxStartAndStopEvent) {
@@ -185,7 +186,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
       }
     }
   }
-  return api
+  return apis
 }
 
 export default apiRegister

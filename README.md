@@ -177,5 +177,36 @@ api.getUsers({
 // finally when fire ajax, the url will be 'http://192.168.0.1/get_users' and 'http://192.168.0.1/get_user_info_by_id'
 ```
 
+## `__ignoreGlobalApiRoot`
+
+Even if you have set an `__apiRoot` in globalConfig, some of your backend apis may not need it. So you can set `__ignoreGlobalApiRoot` to let an api ignore the global api root. This field is accepted in both GlobalConfig, modelConfig and apiCallingConfig.
+
+```javascript
+var userModels = {
+  getUsers: {
+    methods: 'GET',
+    url: '/get_users',
+  },
+  getUserInfoById: {
+    methods: 'GET',
+    url: 'http://rx.top/get_user_info_by_id',
+    __ignoreGlobalApiRoot: true
+  }
+}
+var globalConfig = {
+  __apiRoot: 'http://192.168.0.1'
+}
+var apis = ajaxManager([userModels], globalConfig, $)
+
+api.getUsers({
+  data: {
+    auth: '123456abcdef'
+  }
+}, true, true)
+
+// finally when fire ajax, the url will be 'http://192.168.0.1/get_users' and 'http://rx.top/get_user_info_by_id'
+```
+
+
 # TODO LIST：
 * useage examples
