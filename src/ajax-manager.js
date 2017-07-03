@@ -1,6 +1,6 @@
 // use global count instead of jquery global event because it does't support cross domain request
 window.__apiCount__ = 0
-let apiCounter = {
+window.__apiCounter = {
   add () {
     window.__apiCount__++
   },
@@ -150,7 +150,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
             data: allData,
             beforeSend (xhr) {
               if (triggerAjaxStartAndStopEvent) {
-                apiCounter.add()
+                window.__apiCounter.add()
                 fireStartAndStopEvents('ajaxStart', [xhr])
               }
               if (triggerGlobalEvents) fireGlobalEvents(globalEvents.beforeSend, [xhr])
@@ -166,7 +166,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
             },
             complete (xhr, statusText) {
               if (triggerAjaxStartAndStopEvent) {
-                apiCounter.remove()
+                window.__apiCounter.remove()
                 fireStartAndStopEvents('ajaxStop', [xhr, statusText])
               }
               if (triggerGlobalEvents) fireGlobalEvents(globalEvents.complete, [xhr, statusText])
