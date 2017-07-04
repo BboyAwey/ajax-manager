@@ -2,15 +2,31 @@
 A jQuery ajax management tool
 
 # install
+
 ```
 npm install ajax-manager
 ```
 
-# useage
+# Usage
+
+You can import ajax-manager in both AMD/CMD and CommonJS way.
+
 ```javascript
 import ajaxManager from 'ajax-manager'
 
 ajaxManager(models, globalConfig, jQuery)
+```
+
+Or you can just link ajax-manager with a script tag (**not recommanded**):
+
+```html
+<script src="../ajax-maanager/dist/ajax-manager.js"></script>
+```
+
+In this way, an Object called `ajaxManager` have been insert into global(`window`), you should call it like below:
+
+```javascript
+ajaxManager.default(models, globalConfig, jQuery)
 ```
 
 # API
@@ -150,7 +166,7 @@ api.getUsers({
 
 ## `__apiRoot`
 
-Use `__apiRoot` field to indicate the backend api root, it will concat in front of the `url`. GlobalConfig, modelConfig and apiCallingConfig are all accept this field.
+Use `__apiRoot` field to indicate the backend api root, it will concat in front of the `url`. GlobalConfig, modelConfig and apiCallingConfig all accept this field.
 
 ```javascript
 var userModels = {
