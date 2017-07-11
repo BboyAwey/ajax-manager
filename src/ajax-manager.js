@@ -73,7 +73,8 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
     for (let key in m) {
       let model = m[key]
         // test if there are api useing same name
-      if (key in models) throw new Error(`model: api should not have same name "${key}".`)
+      // if (key in models) throw new Error(`model: api should not have same name "${key}".`)
+      if (key in models) console.warn(`ajaxManager: api in models should not have same name "${key}".`)
       models[key] = model
     }
   })
