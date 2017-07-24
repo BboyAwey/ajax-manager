@@ -138,7 +138,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
         let allData = Object.assign(
           {},
           registerConfig.data || {},
-          models.__globlal.data || {},
+          models.__global.data || {},
           models[key].data || {},
           config.data || {})
         // merge config
