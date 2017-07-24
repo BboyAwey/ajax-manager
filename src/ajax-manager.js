@@ -77,9 +77,10 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
       if (key in models) console.warn(`ajaxManager: api in models should not have same name "${key}".`)
       models[key] = model
     }
+    if (!models.__global) models.__global = {}
   })
   // globle config
-  // $.ajaxSetup(Object.assign({}, models.__globlal || {}, {
+  // $.ajaxSetup(Object.assign({}, models.__global || {}, {
   //   // reset data and event
   //   data: null,
   //   beforeSend: null,
@@ -117,11 +118,11 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
         // merge event
         Object.keys(globalEvents).map(eventName => {
           if (registerConfig[eventName]) globalEvents[eventName].push(registerConfig[eventName])
-          if (models.__globlal[eventName]) globalEvents[eventName].push(models.__globlal[eventName])
+          if (models.__global[eventName]) globalEvents[eventName].push(models.__global[eventName])
         })
         Object.keys(startAndStopEvents).map(eventName => {
           if (registerConfig[eventName]) startAndStopEvents[eventName].push(registerConfig[eventName])
-          if (models.__globlal[eventName]) startAndStopEvents[eventName].push(models.__globlal[eventName])
+          if (models.__global[eventName]) startAndStopEvents[eventName].push(models.__global[eventName])
         })
 
         let localEvents = {
