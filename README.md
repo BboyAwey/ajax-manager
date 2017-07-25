@@ -164,6 +164,8 @@ api.getUsers({
 */
 ```
 
+If your `type` is `post` and `content-type` set to `application/json`, you should use `JSON.stringify()` to parse your `data` to string when use origin jquery `ajax()`, but Ajax Manager have done this for you. Just pass your data object to it.
+
 ## `__apiRoot`
 
 Use `__apiRoot` field to indicate the backend api root, it will concat in front of the `url`. GlobalConfig, modelConfig and apiCallingConfig all accept this field.

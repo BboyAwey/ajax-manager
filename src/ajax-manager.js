@@ -78,6 +78,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
       models[key] = model
     }
     if (!models.__global) models.__global = {}
+    if (!models.__default) models.__default = {}
   })
   // globle config
   // $.ajaxSetup(Object.assign({}, models.__global || {}, {
@@ -144,9 +145,11 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
         // merge config
         let allConfig = Object.assign(
           {},
+          models.__default || {},
           registerConfig || {},
           models[key] || {},
           config,
+          models.__global,
           {
             url: getUrl(key, models[key], registerConfig, config),
             data: allData,
@@ -176,13 +179,16 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
             }
           }
         )
-        // format data when post application json
-        if (allConfig.contentType && allConfig.contentType.toLowerCase().trim() === 'application/json') {
-          allConfig.data = JSON.stringify(allData)
-        }
-        // if got window api config use the type in it
+        // if got window api config then use it
         if (window.__apiConfig__ && window.__apiConfig__[key] && window.__apiConfig__[key].type) {
-          allConfig.type = window.__apiConfig__[key].type
+          allConfig = Object.assign({}, allConfig, window.__apiConfig__[key])
+        }
+        // format data when post application json
+        if (
+          allConfig.type.toLowerCase().trim() === 'post' &&
+          allConfig.contentType &&
+          allConfig.contentType.toLowerCase().trim() === 'application/json') {
+            allConfig.data = JSON.stringify(allData)
         }
         return $.ajax(allConfig)
       }
