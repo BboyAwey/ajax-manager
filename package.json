@@ -1,6 +1,6 @@
 {
   "name": "ajax-manager",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "An jQuery ajax management tool",
   "main": "index.js",
   "scripts": {
