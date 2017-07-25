@@ -191,6 +191,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
         }
         // format data when post application json
         if (
+          allConfig.method &&
           allConfig.method.toLowerCase().trim() === 'post' &&
           allConfig.contentType &&
           allConfig.contentType.toLowerCase().trim() === 'application/json') {
