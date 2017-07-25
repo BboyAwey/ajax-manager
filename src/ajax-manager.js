@@ -1,14 +1,20 @@
 // use global count instead of jquery global event because it does't support cross domain request
-window.__apiCount__ = 0
-window.__apiCounter = {
+function getGlobal () {
+  return window || global
+}
+
+let GLOBAL = getGlobal()
+
+GLOBAL.__apiCount__ = 0
+GLOBAL.__apiCounter = {
   add () {
-    window.__apiCount__++
+    GLOBAL.__apiCount__++
   },
   remove () {
-    window.__apiCount__--
+    GLOBAL.__apiCount__--
   },
   get: function () {
-    return window.__apiCount__
+    return GLOBAL.__apiCount__
   }
 }
 
@@ -44,17 +50,17 @@ window.__apiCounter = {
 //   }
 // }
 
-if (!window.__apiConfig__) window.__apiConfig__ = {}
-if (!window.__apiRoot__) window.__apiRoot__ = null
+if (!GLOBAL.__apiConfig__) GLOBAL.__apiConfig__ = {}
+if (!GLOBAL.__apiRoot__) GLOBAL.__apiRoot__ = null
 
 function getUrl (modelName, modelConfig = {}, registerConfig = {}, config = {}) {
-  let windowApiConfig = window.__apiConfig__[modelName]
+  let windowApiConfig = GLOBAL.__apiConfig__[modelName]
   if (!windowApiConfig) windowApiConfig = {}
   let url = windowApiConfig.url ||
     config.url ||
     modelConfig.url ||
     registerConfig.url || ''
-  let apiRoot = window.__apiRoot__ ||
+  let apiRoot = GLOBAL.__apiRoot__ ||
     config.__apiRoot ||
     modelConfig.__apiRoot ||
     registerConfig.__apiRoot || ''
@@ -155,7 +161,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
             data: allData,
             beforeSend (xhr) {
               if (triggerAjaxStartAndStopEvent) {
-                window.__apiCounter.add()
+                GLOBAL.__apiCounter.add()
                 fireStartAndStopEvents('ajaxStart', [xhr])
               }
               if (triggerGlobalEvents) fireGlobalEvents(globalEvents.beforeSend, [xhr])
@@ -171,7 +177,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
             },
             complete (xhr, statusText) {
               if (triggerAjaxStartAndStopEvent) {
-                window.__apiCounter.remove()
+                GLOBAL.__apiCounter.remove()
                 fireStartAndStopEvents('ajaxStop', [xhr, statusText])
               }
               if (triggerGlobalEvents) fireGlobalEvents(globalEvents.complete, [xhr, statusText])
@@ -180,8 +186,8 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
           }
         )
         // if got window api config then use it
-        if (window.__apiConfig__ && window.__apiConfig__[key] && window.__apiConfig__[key].type) {
-          allConfig = Object.assign({}, allConfig, window.__apiConfig__[key])
+        if (GLOBAL.__apiConfig__ && GLOBAL.__apiConfig__[key] && GLOBAL.__apiConfig__[key].type) {
+          allConfig = Object.assign({}, allConfig, GLOBAL.__apiConfig__[key])
         }
         // format data when post application json
         if (
