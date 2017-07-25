@@ -4,9 +4,28 @@
     <meta charset="utf-8">
     <title>ajax manager</title>
   </head>
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="../dist/ajax-manager.js"></script>
   <script>
-    console.log(ajaxManager)
+    var userModels = {
+      getUsers: {
+        methods: 'GET',
+        url: 'http://127.0.0.1:3000/ajax',
+        data: {
+          origin: 'user'
+        }
+      },
+      __global: {
+        method: 'POST'
+      }
+    }
+    var globalConfig = {
+      data: {
+        type: 'app'
+      }
+    }
+    var apis = ajaxManager.default([userModels], globalConfig, $)
+    console.log(apis.getUsers())
   </script>
   <body>
     hello ajax-manager
