@@ -83,11 +83,10 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
       if (key in models) console.warn(`ajaxManager: api in models should not have same name "${key}".`)
       models[key] = model
     }
-    if (!models.__global) models.__global = {}
     if (!models.__default) models.__default = {}
   })
   // globle config
-  // $.ajaxSetup(Object.assign({}, models.__global || {}, {
+  // $.ajaxSetup(Object.assign({}, models.__default || {}, {
   //   // reset data and event
   //   data: null,
   //   beforeSend: null,
@@ -95,7 +94,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
   //   error: null,
   //   complete: null
   // }))
-  let globalEvents = { // events set in __global and register should be add in this array
+  let globalEvents = { // events set in __default and register should be add in this array
     beforeSend: [],
     success: [],
     error: [],
@@ -125,11 +124,11 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
         // merge event
         Object.keys(globalEvents).map(eventName => {
           if (registerConfig[eventName]) globalEvents[eventName].push(registerConfig[eventName])
-          if (models.__global[eventName]) globalEvents[eventName].push(models.__global[eventName])
+          if (models.__default[eventName]) globalEvents[eventName].push(models.__default[eventName])
         })
         Object.keys(startAndStopEvents).map(eventName => {
           if (registerConfig[eventName]) startAndStopEvents[eventName].push(registerConfig[eventName])
-          if (models.__global[eventName]) startAndStopEvents[eventName].push(models.__global[eventName])
+          if (models.__default[eventName]) startAndStopEvents[eventName].push(models.__default[eventName])
         })
 
         let localEvents = {
@@ -145,7 +144,7 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
         let allData = Object.assign(
           {},
           registerConfig.data || {},
-          models.__global.data || {},
+          models.__default.data || {},
           models[key].data || {},
           config.data || {})
         // merge config
@@ -155,7 +154,6 @@ let apiRegister = function (modelsArray = [], registerConfig = {}, jquery) {
           registerConfig || {},
           models[key] || {},
           config,
-          models.__global,
           {
             url: getUrl(key, models[key], registerConfig, config),
             data: allData,
